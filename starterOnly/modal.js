@@ -26,7 +26,8 @@ const typesObject = getTypeFields(
   'checkbox'
 );
 
-const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/y;
+const emailPattern =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const { text: textElement } = typesObject;
 
 // Functions
@@ -92,6 +93,8 @@ const assertMinLength = input => {
 };
 
 const assertEmail = input => {
+  console.log(input);
+  console.log(input.value);
   return assert(
     input.value.match(emailPattern),
     `${input.name} field must contain an email address.`,
@@ -136,17 +139,20 @@ const assertCheckBoxChecked = input => {
 
 const validate = event => {
   event.preventDefault();
+  let formValid = true;
   for (const [key, fields] of Object.entries(typesObject)) {
     switch (key) {
       case 'text':
         fields.forEach(data => {
           const valid = assertRequired(data) && assertMinLength(data);
+          formValid = formValid === false ? formValid : valid;
           displayInputValid(valid, data);
         });
         break;
       case 'email':
         fields.forEach(data => {
           const valid = assertRequired(data) && assertEmail(data);
+          formValid = formValid === false ? formValid : valid;
           displayInputValid(valid, data);
         });
         break;
@@ -156,12 +162,14 @@ const validate = event => {
             assertRequired(data) &&
             assertMinQuantity(data) &&
             assertMaxQuantity(data);
+          formValid = formValid === false ? formValid : valid;
           displayInputValid(valid, data);
         });
         break;
       case 'date':
         fields.forEach(data => {
           const valid = assertRequired(data);
+          formValid = formValid === false ? formValid : valid;
           displayInputValid(valid, data);
         });
         break;
@@ -169,6 +177,7 @@ const validate = event => {
         fields.forEach(data => {
           const [valid, input] = assertRadioChecked(data);
           const displayInput = input === undefined ? data[0] : input;
+          formValid = formValid === false ? formValid : valid;
           displayInputValid(valid, displayInput);
         });
         break;
@@ -176,10 +185,15 @@ const validate = event => {
         fields.forEach(data => {
           const [checkbox1, checkbox2] = Array.from(data);
           const valid = assertCheckBoxChecked(checkbox1);
+          formValid = formValid === false ? formValid : valid;
           displayInputValid(valid, checkbox1);
           console.log(checkbox2.checked);
         });
     }
+  }
+  if (formValid) {
+    alert('Merci ! Votre réservation a été reçue.');
+    modalbg.style.display = 'none';
   }
 };
 
@@ -237,9 +251,6 @@ textControl.forEach(input => {
     if (input.parentElement.dataset.errorVisible === 'true') {
       switch (input.type) {
         case 'text':
-          console.log(input);
-          console.log(assertRequired(input));
-          console.log(assertMinLength(input));
           if (assertRequired(input) && assertMinLength(input))
             hideInvalidMessage(input);
           break;
