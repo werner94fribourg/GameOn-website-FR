@@ -32,14 +32,12 @@ const { text: textElement } = typesObject;
 
 // Functions
 const hideInvalidMessage = input => {
-  console.log(input.parentElement);
   input.parentElement.dataset.errorVisible = false;
   input.parentElement.dataset.error = '';
 };
 
 const displayInputValid = (valid, input) => {
   if (valid) {
-    console.log(input.type === 'checkbox' ? input.checked : input.value);
     input.parentElement.dataset.errorVisible = false;
   } else {
     input.parentElement.dataset.errorVisible = true;
@@ -67,7 +65,6 @@ const displayErrMess = name => {
 
 const assert = (value, errMess, input) => {
   if (!value) {
-    console.error(errMess);
     input.parentElement.dataset.error = displayErrMess(input.name);
     return false;
   }
@@ -93,8 +90,6 @@ const assertMinLength = input => {
 };
 
 const assertEmail = input => {
-  console.log(input);
-  console.log(input.value);
   return assert(
     input.value.match(emailPattern),
     `${input.name} field must contain an email address.`,
@@ -187,7 +182,6 @@ const validate = event => {
           const valid = assertCheckBoxChecked(checkbox1);
           formValid = formValid === false ? formValid : valid;
           displayInputValid(valid, checkbox1);
-          console.log(checkbox2.checked);
         });
     }
   }
