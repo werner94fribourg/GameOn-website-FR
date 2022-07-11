@@ -15,6 +15,7 @@ const closeBtn = document.querySelector('.close');
 const [reserveForm] = document.getElementsByName('reserve');
 const checkboxInput = document.querySelectorAll('.checkbox-input');
 const textControl = document.querySelectorAll('.text-control');
+const validMessage = document.querySelector('.valid-message');
 
 // Variables
 const typesObject = getTypeFields(
@@ -186,8 +187,9 @@ const validate = event => {
     }
   }
   if (formValid) {
-    alert('Merci ! Votre réservation a été reçue.');
-    modalbg.style.display = 'none';
+    reserveForm.style.display = 'none';
+    validMessage.style.display = 'block';
+    //alert('Merci ! Votre réservation a été reçue.');
   }
 };
 
@@ -220,13 +222,16 @@ function switchInput(type, array) {
 modalBtn.forEach(btn => btn.addEventListener('click', launchModal));
 
 // launch modal form
-function launchModal() {
-  modalbg.style.display = 'block';
+function launchModal(event) {
+  event.preventDefault();
+  modalbg.classList.toggle('active');
 }
 
 // close modal form
 closeBtn.addEventListener('click', () => {
-  modalbg.style.display = 'none';
+  modalbg.classList.toggle('active');
+  validMessage.style.removeProperty('display');
+  reserveForm.style.removeProperty('display');
 });
 
 // Submit the form
