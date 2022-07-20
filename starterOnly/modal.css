@@ -212,14 +212,24 @@ main {
 
 .modal-body .valid-message {
   display: none;
-}
-
-.modal-body .valid-message__title {
-  font-size: 3.5rem;
+  position: relative;
+  height: 804.703px;
 }
 
 .modal-body .valid-message__description {
-  font-size: 1.5rem;
+  position: absolute;
+  font-size: 2rem;
+  width: 65%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.modal-body .btn-close {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 label {
@@ -355,7 +365,8 @@ input[data-error]::after {
   transform: rotate(-45deg);
 }
 .btn-submit,
-.btn-signup {
+.btn-signup,
+.btn-close {
   background: #fe142f;
   display: block;
   margin: 0 auto;
@@ -566,6 +577,9 @@ footer {
   .topnav a.icon,
   .topnav.responsive a.icon {
     top: 1.875rem;
+  }
+  .modal-body .valid-message {
+    height: 505.734px;
   }
 }
 

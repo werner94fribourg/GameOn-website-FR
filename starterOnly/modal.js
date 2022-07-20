@@ -13,7 +13,8 @@ function editNav() {
 const modalbg = document.querySelector('.bground');
 const modalBtn = document.querySelectorAll('.modal-btn');
 const formData = document.querySelectorAll('.formData');
-const closeBtn = document.querySelector('.close');
+const closeSpan = document.querySelector('.close');
+const closeBtn = document.querySelector('.btn-close');
 const [reserveForm] = document.getElementsByName('reserve');
 const checkboxInput = document.querySelectorAll('.checkbox-input');
 const textControl = document.querySelectorAll('.text-control');
@@ -138,6 +139,25 @@ function getTypeFields(...types) {
   });
   return typesObject;
 }
+// Function used to clear all the input fields when the submission of a form is successful
+const clearInputs = () => {
+  for (const [key, fields] of Object.entries(typesObject)) {
+    if (key === 'radio') {
+      const [fieldsArray] = fields;
+      fieldsArray.forEach(field => {
+        field.checked = false;
+      });
+    }
+    if (key === 'checkbox') {
+      const [[_, checkbox2]] = fields;
+      checkbox2.checked = false;
+    } else {
+      fields.forEach(data => {
+        data.value = '';
+      });
+    }
+  }
+};
 
 /*
  * Main functions
@@ -206,6 +226,7 @@ const validate = event => {
   }
   if (formValid) {
     reserveForm.style.display = 'none';
+    clearInputs();
     validMessage.style.display = 'block';
   }
 };
@@ -213,6 +234,12 @@ const validate = event => {
 // This function is called as a callback function when we click a btn-modal DOM element on the page
 function launchModal(event) {
   event.preventDefault();
+  validMessage.style.removeProperty('display');
+  reserveForm.style.removeProperty('display');
+  modalbg.classList.toggle('active');
+}
+// This function is called as a callback function when we click a element used to close the modal
+function closeModal() {
   modalbg.classList.toggle('active');
 }
 
@@ -223,11 +250,8 @@ function launchModal(event) {
 modalBtn.forEach(btn => btn.addEventListener('click', launchModal));
 
 // close modal form
-closeBtn.addEventListener('click', () => {
-  modalbg.classList.toggle('active');
-  validMessage.style.removeProperty('display');
-  reserveForm.style.removeProperty('display');
-});
+closeBtn.addEventListener('click', closeModal);
+closeSpan.addEventListener('click', closeModal);
 
 // Submit the form
 reserveForm.addEventListener('submit', validate);
